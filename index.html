@@ -5,28 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stall Booking System</title>
     <style>
+
         /* Mobile styles: Apply when the screen width is 768px or less */
 @media (max-width: 768px) {
-    body {
-        font-size: 14px; /* Reduce overall font size */
-        margin: 10px;
-    }
-
     .floor-plan-container {
-        overflow-x: auto; 
+        width: 100%; /* Fit the container to the screen width */
+        height: auto; /* Let height adjust based on content */
+        overflow: scroll; /* Enable scrolling for the floor plan */
     }
 
     #floor-plan {
-        width: 100%; /* Make the floor plan image fit the screen */
-        height: auto; /* Maintain aspect ratio */
+        width: 1280px; /* Maintain the original image width */
+        height: 720px; /* Maintain the original image height */
     }
 
     .stall {
-        width: 10vw; /* Use a relative width for stalls */
-        height: 10vw; /* Keep stalls square */
-        font-size: 10px; /* Adjust text size */
-        line-height: 10vw; /* Center text vertically */
+        position: absolute;
+        font-size: 10px; /* Adjust stall text size for mobile */
     }
+}
+
 
     #booking-form-modal {
         width: 90%; /* Use almost the full width of the screen */
@@ -152,6 +150,13 @@
         #cancel-booking {
             background-color: red;
         }
+
+        h1 {
+    text-align: center; /* Center-align the title */
+    margin: 20px 0; /* Add spacing around the title */
+    font-size: 24px; /* Optional: Adjust font size if needed */
+}
+
     </style>
 </head>
 <body>
