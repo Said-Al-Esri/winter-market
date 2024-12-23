@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stall Booking System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+
+        .floor-plan-container {
+            position: relative;
+            width: 1280px;
+            height: 720px;
+            margin: auto;
+            overflow: hidden;
+        }
+
+        #floor-plan {
+            width: 100%;
+            height: auto;
+        }
+
+        .stall {
+            position: absolute;
+            width: 47.04px;
+            height: 28.8px;
+            background-color: green;
+            color: white;
+            text-align: center;
+            line-height: 30px;
+            border-radius: 2px;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .stall.booked {
+            background-color: red;
+            cursor: not-allowed;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .stall.reserved {
+            background-color: darkorange;
+            cursor: not-allowed;
+            color: white;
+            font-weight: bold;
+            font-size: 8px;
+            text-align: center;
+            line-height: 28.8px;
+        }
+
+        .stall:hover:not(.booked):not(.reserved) {
+            background-color: lightgreen;
+            transform: scale(1.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        #booking-form-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            max-width: 300px;
+            width: 100%;
+        }
+
+        #booking-form-modal h3 {
+            margin-bottom: 15px;
+        }
+
+        #booking-form-modal input,
+        #booking-form-modal select {
+            width: 100%;
+            margin-bottom: 15px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        #booking-form-modal button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+        }
+
+        #confirm-booking {
+            background-color: green;
+        }
+
+        #cancel-booking {
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>Winter Bazaar Stall Reservation</h1>
+    <div class="floor-plan-container">
+        <img src="floor-plan.png" alt="Floor Plan" id="floor-plan">
+        <!-- Add stalls with their positions -->
+    <div class="stall" data-stall-number="1" style="top: 465.24px; left: 546.64px;">1</div>
+    <div class="stall" data-stall-number="2" style="top: 465.24px; left: 476px;">2</div>
+    <div class="stall" data-stall-number="3" style="top: 465.24px; left: 402px;">3</div>
+    <div class="stall" data-stall-number="4" style="top: 465.24px; left: 338px;">4</div>
+    
+    <div class="stall" data-stall-number="5" style="top: 347px; left: 323px; transform: rotate(270deg);">5</div>
+    <div class="stall" data-stall-number="6" style="top: 287px; left: 323px; transform: rotate(270deg);">6</div>
+    <div class="stall" data-stall-number="7" style="top: 223px; left: 323px; transform: rotate(270deg);">7</div>
+    <div class="stall" data-stall-number="8" style="top: 153px; left: 323px; transform: rotate(270deg);">8</div>
+    
+    <div class="stall" data-stall-number="9" style="top: 119px; left: 488px;">9</div>
+    <div class="stall" data-stall-number="10" style="top: 119px; left: 549px;">10</div>
+    <div class="stall" data-stall-number="11" style="top: 119px; left: 611px;">11</div>
+    <div class="stall" data-stall-number="12" style="top: 119px; left: 677px;">12</div>
+    <div class="stall" data-stall-number="13" style="top: 119px; left: 735px;">13</div>
+
+    <div class="stall" data-stall-number="14" style="top: 130px; left: 886px; transform: rotate(90deg);">14</div>
+
+    <div class="stall" data-stall-number="15" style="top: 290px; left: 883px; transform: rotate(90deg);">15</div>
+    <div class="stall" data-stall-number="16" style="top: 355px; left: 883px; transform: rotate(90deg);">16</div>
+    <div class="stall" data-stall-number="17" style="top: 413px; left: 883px; transform: rotate(90deg);">17</div>
+
+    <div class="stall" data-stall-number="18" style="top: 465.24px; left: 874px;">18</div>
+    <div class="stall" data-stall-number="19" style="top: 465.24px; left: 809px;">19</div>
+    <div class="stall" data-stall-number="20" style="top: 465.24px; left: 745px;">20</div>
+
+    <div class="stall" data-stall-number="21" style="top: 395px; left: 745px;">21</div>
+    <div class="stall" data-stall-number="22" style="top: 395px; left: 692px;">22</div>
+    <div class="stall" data-stall-number="23" style="top: 395px; left: 640px;">23</div>
+
+    <div class="stall" data-stall-number="24" style="top: 395px; left: 549px;">24</div>
+    <div class="stall" data-stall-number="25" style="top: 395px; left: 497px;">25</div>
+    <div class="stall" data-stall-number="26" style="top: 395px; left: 445px;">26</div>
+
+    <div class="stall" data-stall-number="27" style="top: 350px; left: 484px; transform: rotate(90deg);">27</div>
+    <div class="stall" data-stall-number="28" style="top: 298px; left: 484px; transform: rotate(90deg);">28</div>
+    <div class="stall" data-stall-number="29" style="top: 246px; left: 484px; transform: rotate(90deg);">29</div>
+    <div class="stall" data-stall-number="30" style="top: 194px; left: 484px; transform: rotate(90deg);">30</div>
+
+    <div class="stall" data-stall-number="31" style="top: 194px; left: 520px; transform: rotate(90deg);">31</div>
+    <div class="stall" data-stall-number="32" style="top: 246px; left: 520px; transform: rotate(90deg);">32</div>
+    <div class="stall" data-stall-number="33" style="top: 298px; left: 520px; transform: rotate(90deg);">33</div>
+    <div class="stall" data-stall-number="34" style="top: 350px; left: 520px; transform: rotate(90deg);">34</div>
+
+    <div class="stall" data-stall-number="35" style="top: 350px; left: 677px; transform: rotate(90deg);">35</div>
+    <div class="stall" data-stall-number="36" style="top: 298px; left: 677px; transform: rotate(90deg);">36</div>
+    <div class="stall" data-stall-number="37" style="top: 246px; left: 677px; transform: rotate(90deg);">37</div>
+    <div class="stall" data-stall-number="38" style="top: 194px; left: 677px; transform: rotate(90deg);">38</div>
+
+    <div class="stall" data-stall-number="39" style="top: 194px; left: 713px; transform: rotate(90deg);">39</div>
+    <div class="stall" data-stall-number="40" style="top: 246px; left: 713px; transform: rotate(90deg);">40</div>
+    <div class="stall" data-stall-number="41" style="top: 298px; left: 713px; transform: rotate(90deg);">41</div>
+    <div class="stall" data-stall-number="42" style="top: 350px; left: 713px; transform: rotate(90deg);">42</div>
+
+    <div class="stall" data-stall-number="43" style="top: 515px; left: 565px;">43</div>
+    <div class="stall" data-stall-number="44" style="top: 580px; left: 514px; transform: rotate(90deg);">44</div>
+    <div class="stall" data-stall-number="45" style="top: 548px; left: 791px; transform: rotate(270deg);">45</div>
+    <!-- Add all 45 stalls similarly -->
+    </div>
+
+    <!-- Modal Form -->
+    <div id="booking-form-modal">
+        <h3>Book Stall <span id="stall-number"></span></h3>
+        <label for="business-name">Business Name:</label>
+        <input type="text" id="business-name" required>
+
+        <label for="category">Category:</label>
+        <select id="category" required>
+            <option value="" disabled selected>Select a category</option>
+            <option value="Beauty Cosmetics">Beauty Cosmetics</option>
+            <option value="Books">Books</option>
+            <option value="Clothes">Clothes</option>
+            <option value="Electronics">Electronics</option>
+            <option value="Food">Food</option>
+            <option value="Jewelry">Jewelry</option>
+            <option value="Kids Toys">Kids Toys</option>
+            <option value="Perfumes">Perfumes</option>
+        </select>
+
+        <label for="phone-number">Phone Number:</label>
+        <input type="text" id="phone-number" placeholder="Enter 8 digits" maxlength="8" required>
+
+         <!-- Payment Disclaimer -->
+    <div style="font-size: 14px; color: black; background-color: #f9f9f9; padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin: 10px 0; text-align: left;">
+        <strong>Important:</strong> By reserving a stall, you agree to complete the payment within <strong>24 hours</strong>. 
+        Failure to complete the payment within this timeframe will result in the cancellation of your reservation.
+        <br><br>
+        <strong>Payment Details:</strong>
+        <ul style="margin: 0; padding-left: 20px;">
+            <li>Bank: Bank Muscat</li>
+            <li>Account Name: <strong>Said Al Esri</strong></li>
+            <li>Account Number: <strong>0327 0417 1364 0017</strong></li>
+            <li>Mobile Payment: <strong>+968 95721670</strong></li>
+        </ul>
+        <br>
+        Once the payment is made, please send the payment transcript via WhatsApp or SMS to <strong>+968 95721670</strong>.
+    </div>
+
+        <button id="confirm-booking">Reserve</button>
+        <button id="cancel-booking">Cancel</button>
+    </div>
+
+    <script>
+        const webAppUrl = "https://script.google.com/macros/s/AKfycbzD7-XRmMxzeXa8IumH3-ktdMUDu06W3mCvcYOmP0hmAxUA4AW_6Mjjdd2r8SDB_2yR/exec";
+
+        async function fetchStallData() {
+            const response = await fetch(webAppUrl);
+            return await response.json();
+        }
+
+        async function reserveStall(stallNumber, businessName, category, phoneNumber) {
+            const response = await fetch(`${webAppUrl}?tableNumber=${stallNumber}&newStatus=Reserved&businessName=${encodeURIComponent(businessName)}&category=${encodeURIComponent(category)}&phoneNumber=${encodeURIComponent(phoneNumber)}`, {
+                method: "POST",
+            });
+            return await response.text();
+        }
+
+        function showModal(stallNumber) {
+
+            document.getElementById("category").value = ""; // Reset the category field
+
+            const modal = document.getElementById("booking-form-modal");
+            document.getElementById("stall-number").textContent = stallNumber;
+            modal.style.display = "block";
+
+            const confirmButton = document.getElementById("confirm-booking");
+            confirmButton.onclick = async () => {
+                const businessName = document.getElementById("business-name").value;
+                const category = document.getElementById("category").value;
+                const phoneNumber = document.getElementById("phone-number").value;
+
+                if (phoneNumber.length !== 8 || !/^[97]/.test(phoneNumber)) {
+                    alert("Invalid phone number.");
+                    return;
+                }
+                if (!businessName) {
+                    alert("Please enter the name of your business.");
+                    return;
+                }
+
+                const result = await reserveStall(stallNumber, businessName, category, "+968 " + phoneNumber);
+                alert("Stall reserved for 24 hours. Please complete payment to confirm.");
+
+                const stallDiv = document.querySelector(`.stall[data-stall-number="${stallNumber}"]`);
+                stallDiv.classList.add("reserved");
+                stallDiv.textContent = "Reserved";
+
+                closeModal();
+            };
+
+            document.getElementById("cancel-booking").onclick = closeModal;
+        }
+
+        function closeModal() {
+            const modal = document.getElementById("booking-form-modal");
+            modal.style.display = "none";
+            document.getElementById("business-name").value = "";
+            document.getElementById("category").value = "Beauty Cosmetics";
+            document.getElementById("phone-number").value = "";
+        }
+
+        async function init() {
+            const stalls = document.querySelectorAll(".stall");
+            const data = await fetchStallData();
+
+            stalls.forEach(stall => {
+                const stallNumber = stall.getAttribute("data-stall-number");
+                const matchingData = data.find(d => d.tableNumber == stallNumber);
+
+                if (matchingData && matchingData.status === "Booked") {
+                    stall.classList.add("booked");
+                    stall.textContent = "X";
+                } else if (matchingData && matchingData.status === "Reserved") {
+                    stall.classList.add("reserved");
+                    stall.textContent = "Reserved";
+                }
+
+                stall.addEventListener("click", () => {
+                    if (!stall.classList.contains("booked") && !stall.classList.contains("reserved")) {
+                        showModal(stallNumber);
+                    } else {
+                        alert("This stall is not available.");
+                    }
+                });
+            });
+        }
+
+        init();
+    </script>
+</body>
+</html>
