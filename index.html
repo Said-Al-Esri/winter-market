@@ -152,18 +152,20 @@
         }
 
         h1 {
-    text-align: center; /* Center-align the title */
-    margin: 20px 0; /* Add spacing around the title */
-    font-size: 24px; /* Optional: Adjust font size if needed */
+    text-align: center !important; /* Force center alignment on all screens */
+    width: 100%; /* Ensure the title spans the full width */
+    margin: 20px 0; /* Add spacing above and below */
+    font-size: 24px; /* Ensure proper size for desktop */
 }
 
+/* Adjust for mobile */
 @media (max-width: 768px) {
     h1 {
-        text-align: center; /* Ensure it stays centered on mobile */
-        font-size: 18px; /* Optional: Adjust font size for smaller screens */
-        margin: 15px 0; /* Add appropriate spacing for mobile */
+        font-size: 18px; /* Smaller font size for smaller screens */
+        margin: 15px 0; /* Adjust spacing for mobile */
     }
 }
+
 
 
 
